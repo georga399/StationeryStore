@@ -1,12 +1,15 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using StationeryStore.Entities.DAOs;
+using StationeryStore.Data.DAOs;
 namespace StationeryStore.Data;
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<User>
 {
-    DbSet<User> Users => Set<User>();
-    DbSet<Product> Products => Set<Product>();
-    DbSet<Category> Categories => Set<Category>();
+    public DbSet<Product> Products {get; set;} = null!;
+    public DbSet<Category> Categories{get; set;} = null!;
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
-    {}
+    {
+        
+    }
 }
