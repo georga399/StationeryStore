@@ -11,7 +11,7 @@ using StationeryStore.Data;
 namespace StationeryStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231109100730_Initial")]
+    [Migration("20231109180526_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using System.Text;
 using StationeryStore.Data.DAOs;
 using StationeryStore.Services;
+using AutoMapper;
+using StationeryStore.Mappings;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -21,7 +23,7 @@ builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();   
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<UserService>();
-
+builder.Services.AddAutoMapper(typeof(CartProductProfile), typeof(ProductProfile), typeof(UserProfile), typeof(CategoryProfile));
 builder.Services.AddAuthorization();
 
 // builder.Services.AddTransient<AdministratorSeedData>();

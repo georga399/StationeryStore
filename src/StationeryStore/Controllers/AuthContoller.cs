@@ -29,6 +29,8 @@ public class AuthController : Controller
             return BadRequest(ModelState);
         }
         var userId = await _authService.LoginUser(model);
+        if(userId == null)
+            return BadRequest("Unauthorized");
         return Ok(userId);
     }
     // [HttpGet("Register")]
