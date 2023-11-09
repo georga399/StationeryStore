@@ -145,6 +145,31 @@ namespace StationeryStore.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("StationeryStore.Data.DAOs.CartProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CartProducts");
+                });
+
             modelBuilder.Entity("StationeryStore.Data.DAOs.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -176,14 +201,9 @@ namespace StationeryStore.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Products");
                 });
@@ -303,6 +323,25 @@ namespace StationeryStore.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("StationeryStore.Data.DAOs.CartProduct", b =>
+                {
+                    b.HasOne("StationeryStore.Data.DAOs.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StationeryStore.Data.DAOs.User", "User")
+                        .WithMany("Cart")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("StationeryStore.Data.DAOs.Product", b =>
                 {
                     b.HasOne("StationeryStore.Data.DAOs.Category", "Category")
@@ -310,10 +349,6 @@ namespace StationeryStore.Data.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("StationeryStore.Data.DAOs.User", null)
-                        .WithMany("Cart")
-                        .HasForeignKey("UserId");
 
                     b.Navigation("Category");
                 });

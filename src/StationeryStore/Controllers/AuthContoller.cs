@@ -1,10 +1,6 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using StationeryStore.Data;
-using StationeryStore.Data.DAOs;
 using StationeryStore.Models;
+using StationeryStore.Services;
 
 namespace StationeryStore.Controllers;
 
@@ -12,19 +8,13 @@ namespace StationeryStore.Controllers;
 [Route("[controller]")]
 public class AuthController : Controller
 { 
-    // private readonly AdministratorSeedData _seedData;
     private readonly ILogger<AuthController> _logger;
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
+    private readonly AuthService _authService;
     public AuthController(ILogger<AuthController> logger, 
-        UserManager<User> userManager, 
-        // AdministratorSeedData seedData,
-        SignInManager<User> signInManager)
+        AuthService authService)
     {
         _logger = logger;
-        _userManager = userManager;
-        _signInManager = signInManager;
-        // _seedData = seedData;
+        _authService = authService;
     }
     // [HttpGet("Login")]
     // public IActionResult Login()
@@ -32,19 +22,14 @@ public class AuthController : Controller
     //     return View();
     // }
     [HttpPost("Login")]
-    public async Task<IActionResult> Login(UserViewModel model)
+    public async Task<IActionResult> Login(AuthViewModel model)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        var user = await _userManager.FindByNameAsync(model.Username);
-        if(user == null || !(await _userManager.CheckPasswordAsync(user, model.Password)))
-        {
-            return Unauthorized();
-        }
-        await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false);
-        return Ok(user.Id);
+        var userId = await _authService.LoginUser(model);
+        return Ok(userId);
     }
     // [HttpGet("Register")]
     // public IActionResult Register()
@@ -52,39 +37,25 @@ public class AuthController : Controller
     //     return View();
     // }
     [HttpPost("Register")]
-    public async Task<IActionResult> Register(UserViewModel model)
+    public async Task<IActionResult> Register(AuthViewModel model)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
-        }
-        try
+        }         
+        var result = await _authService.RegisterUser(model, ModelState);
+        if (!result)
         {
-            
-            var user = new User{UserName = model.Username}; 
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
-                return BadRequest(ModelState);
-            }
-            return Accepted("Successful registration");
+            return BadRequest(ModelState);
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"Something Went Wrong in the {nameof(Register)}");
-            return Problem($"Something Went Wrong in the {nameof(Register)}", statusCode: 500);
-        }
+        return Accepted("Successful registration");
     }
-    // [HttpPost("Logout")]
-    // public IActionResult Logout()
-    // {
-
-    // }
+    [HttpPost("Logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await _authService.LogoutUser();
+        return Accepted("Cookie was deleted");
+    }
     // [Authorize]
     // [HttpGet("test")]
     // public IActionResult Test()

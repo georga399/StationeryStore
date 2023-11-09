@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
 using StationeryStore.Data.DAOs;
-
+using StationeryStore.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,8 +19,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddDbContextPool<ApplicationDbContext>(options => 
         options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();   
-
-
+builder.Services.AddTransient<AuthService>();
+builder.Services.AddTransient<UserService>();
 
 builder.Services.AddAuthorization();
 

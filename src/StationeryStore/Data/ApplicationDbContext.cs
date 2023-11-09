@@ -6,6 +6,7 @@ namespace StationeryStore.Data;
 public class ApplicationDbContext : IdentityDbContext<User>
 {
     public DbSet<Product> Products {get; set;} = null!;
+    public DbSet<CartProduct> CartProducts{get; set;} = null!;
     public DbSet<Category> Categories{get; set;} = null!;
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
