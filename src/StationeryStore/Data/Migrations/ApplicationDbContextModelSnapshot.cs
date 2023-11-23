@@ -170,28 +170,10 @@ namespace StationeryStore.Data.Migrations
                     b.ToTable("CartProducts");
                 });
 
-            modelBuilder.Entity("StationeryStore.Data.DAOs.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories");
-                });
-
             modelBuilder.Entity("StationeryStore.Data.DAOs.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Cost")
@@ -202,8 +184,6 @@ namespace StationeryStore.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -340,22 +320,6 @@ namespace StationeryStore.Data.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("StationeryStore.Data.DAOs.Product", b =>
-                {
-                    b.HasOne("StationeryStore.Data.DAOs.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("StationeryStore.Data.DAOs.Category", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("StationeryStore.Data.DAOs.User", b =>

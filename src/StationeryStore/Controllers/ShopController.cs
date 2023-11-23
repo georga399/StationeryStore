@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using StationeryStore.Models;
+using StationeryStore.Services;
+using System.Security.Claims;
 
 namespace StationeryStore.Controllers;
 [Controller]
@@ -8,37 +11,50 @@ namespace StationeryStore.Controllers;
 public class ShopController: Controller
 {
     private readonly ILogger<ShopController> _logger;
-
-    public ShopController(ILogger<ShopController> logger)
+    private readonly ShopService _shopService;
+    public ShopController(ILogger<ShopController> logger, ShopService shopService)
     {
         _logger = logger;
+        _shopService = shopService;
     }
-    [HttpGet("getproducts/category={category}/page={page:int}")]
-    public IActionResult GetProducts(string category, int page)
+    [HttpGet("getproducts")]
+    public IActionResult GetProducts()
     {
-        return Accepted();
+        var models = _shopService.GetProducts();
+        return View(models);
     }
     [HttpGet("getproductinfo/{id:int}")]
     public IActionResult GetProductInfo(int id)
     {
-        return Accepted();
+        var model = _shopService.GetProductInfo(id);
+        return View(model);
     }
     [Authorize]
     [HttpGet("Cart")]
     public IActionResult GetCartList()
     {
-        return Accepted();
+        var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var models = _shopService.GetCartProducts(userId!);
+        return View(models);
     }    
     [Authorize]
     [HttpPost("AddToCart")]
-    public IActionResult AddToCart(ProductViewModel product)
+    public IActionResult AddToCart(CartProductViewModel model)
     {
+        var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var res = _shopService.AddToCart(model, userId!);
+        if(res == false)
+            return BadRequest();
         return Accepted();
     }
     [Authorize]
     [HttpDelete("DeleteFromCart")]
-    public IActionResult DeleteFromCart(ProductViewModel product)
+    public IActionResult DeleteFromCart(CartProductViewModel model)
     {
+        var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var res = _shopService.DeleteFromCart(model, userId!);   
+        if(res == false)
+            return BadRequest();
         return Accepted();
     }
 }

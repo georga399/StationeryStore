@@ -24,26 +24,28 @@ public class ManageController : Controller
     {
         return View(); //Todo: create view
     }
-    [HttpPost("CreateCategory")]
-    public IActionResult CreateCategory(CategoryViewModel category)
-    {
-        _adminService.CreateCategory(category);
-        return Accepted();
-    }
     [HttpPost("CreateProduct")]
     public IActionResult CreateProduct(ProductViewModel product)
     {
-        
-        return Accepted();
+        var res = _adminService.CreateProduct(product);
+        if(res)
+            return Accepted();
+        return BadRequest("Wrong format of data");
     }
-    [HttpDelete("DeleteCategory")]
-    public IActionResult DeleteCategory(CategoryViewModel category)
+    [HttpPut("EditProduct")]
+    public IActionResult EditProduct(ProductViewModel product)
     {
-        return Accepted();
+        var res = _adminService.EditProduct(product);
+        if(res)
+            return Accepted();
+        return BadRequest();
     }
     [HttpDelete("DeleteProduct")]
     public IActionResult DeleteProduct(ProductViewModel product)
     {
-        return Accepted();
+        var res = _adminService.DeleteProduct(product);
+        if(res)
+            return Accepted();
+        return BadRequest();
     }
 }

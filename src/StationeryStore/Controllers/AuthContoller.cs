@@ -16,13 +16,13 @@ public class AuthController : Controller
         _logger = logger;
         _authService = authService;
     }
-    // [HttpGet("Login")]
-    // public IActionResult Login()
-    // {
-    //     return View();
-    // }
+    [HttpGet("Login")]
+    public IActionResult Login()
+    {
+        return View();
+    }
     [HttpPost("Login")]
-    public async Task<IActionResult> Login(AuthViewModel model)
+    public async Task<IActionResult> Login([FromBody] AuthViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -33,13 +33,13 @@ public class AuthController : Controller
             return BadRequest("Unauthorized");
         return Ok(userId);
     }
-    // [HttpGet("Register")]
-    // public IActionResult Register()
-    // {
-    //     return View();
-    // }
+    [HttpGet("Register")]
+    public IActionResult Register()
+    {
+        return View();
+    }
     [HttpPost("Register")]
-    public async Task<IActionResult> Register(AuthViewModel model)
+    public async Task<IActionResult> Register([FromBody] AuthViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -58,10 +58,4 @@ public class AuthController : Controller
         await _authService.LogoutUser();
         return Accepted("Cookie was deleted");
     }
-    // [Authorize]
-    // [HttpGet("test")]
-    // public IActionResult Test()
-    // {
-    //     return Ok("Authorized");
-    // }
 }
