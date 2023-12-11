@@ -33,7 +33,8 @@ public class AdminService
         if(foundProduct == null)
             return false;
         Product product = _mapper.Map<ProductViewModel, Product>(model);
-        _dbContext.Products.Update(product);
+        foundProduct.Cost = product.Cost;
+        // _dbContext.Products.Update(product);
         _dbContext.SaveChanges();
         return true;
     }

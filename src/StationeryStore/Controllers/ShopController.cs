@@ -17,7 +17,7 @@ public class ShopController: Controller
         _logger = logger;
         _shopService = shopService;
     }
-    [HttpGet("getproducts")]
+    [HttpGet("GetProducts")]
     public IActionResult GetProducts()
     {
         var models = _shopService.GetProducts();

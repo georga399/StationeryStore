@@ -23,6 +23,8 @@ builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();   
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<AdminService>();
+builder.Services.AddTransient<ShopService>();
+
 builder.Services.AddAutoMapper(typeof(CartProductProfile), typeof(ProductProfile), typeof(UserProfile));
 builder.Services.AddAuthorization();
 

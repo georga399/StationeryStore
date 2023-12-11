@@ -1,0 +1,55 @@
+@model List<CartProductViewModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Корзина</title>
+</head>
+<body>
+
+    <h2>Корзина</h2>
+
+    <ul>
+        @foreach (var cartProduct in Model)
+        {
+            <li>
+                <p><strong>Имя товара:</strong> @cartProduct.Product.Name</p>
+                <p><strong>Цена:</strong> @cartProduct.Product.Cost</p>
+                <p><strong>Количество:</strong> @cartProduct.Count</p>
+                @* <button type="button" onclick="deleteFromCart(@cartProduct)">Удалить</button>  *@
+            </li>
+        }
+    </ul>
+
+    @* <script>
+        function deleteFromCart(cartProduct) {
+            fetch('http://localhost:5264/Shop/DeleteFromCart?Id=' + cartProductId +
+                '&Product.Id=' + cartProduct.Product.Id +
+                '&Product.Name=' + cartProduct.Product.Name +
+                '&Product.Cost=' + cartProduct.Product.Cost +
+                '&ProductId=' + cartProduct.ProductId +
+                '&Count=' + cartProduct.Count +
+                '&User.Id=' + cartProduct.User.Id +
+                '&User.Name=' + cartProduct.User.Name +
+                '&UserId=' + cartProduct.UserId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    alert('Товар удален из корзины!');
+                    location.reload(); // Перезагрузить страницу после удаления
+                } else {
+                    alert('Ошибка при удалении из корзины.');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+            });
+        }
+    </script> *@
+
+</body>
+</html>

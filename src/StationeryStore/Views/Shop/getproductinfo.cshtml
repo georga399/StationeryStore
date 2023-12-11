@@ -1,0 +1,44 @@
+@model ProductViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Информация о товаре</title>
+</head>
+<body>
+
+    <h2>Информация о товаре</h2>
+
+    <div>
+        <p><strong>Имя товара:</strong> @Model.Name</p>
+        <p><strong>Цена:</strong> @Model.Cost</p>
+
+        <button type="button" onclick="addToCart()">Добавить в корзину</button>
+    </div>
+
+    <script>
+        function addToCart() {
+            console.log("123")
+            
+
+          fetch('http://localhost:5264/Shop/AddToCart?Id=@Model.Id&Product.Id=@Model.Id&Product.Name=@Model.Name&Product.Cost=@Model.Cost&ProductId=@Model.Id&Count=1&User.Id=123&User.Name=123&UserId=123', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': '*/*'
+                }
+            })
+            .then(response => {
+                if (response.status === 202) {
+                    alert('Товар добавлен в корзину!');
+                } else {
+                    alert('Ошибка при добавлении в корзину.');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+            });
+        }
+    </script>
+
+</body>
+</html>

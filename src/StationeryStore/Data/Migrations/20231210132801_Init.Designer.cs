@@ -11,8 +11,8 @@ using StationeryStore.Data;
 namespace StationeryStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231123183430_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231210132801_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

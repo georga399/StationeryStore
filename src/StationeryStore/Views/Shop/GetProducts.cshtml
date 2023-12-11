@@ -1,0 +1,22 @@
+@model List<ProductViewModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список товаров</title>
+</head>
+<body>
+
+    <h2>Список товаров</h2>
+
+    <ul>
+        @foreach (var product in Model)
+        {
+            <li>
+                <a href="http://localhost:5264/Shop/getproductinfo/@product.Id" >@product.Name</a>
+            </li>
+        }
+    </ul>
+
+</body>
+</html>
