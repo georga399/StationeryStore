@@ -9,14 +9,36 @@
 
     <h2>Список товаров</h2>
 
-    <ul>
-        @foreach (var product in Model)
-        {
-            <li>
-                <a href="http://localhost:5264/Shop/getproductinfo/@product.Id" >@product.Name</a>
-            </li>
+<ul>
+    @foreach (var product in Model)
+    {
+        <li>
+            <a href="http://localhost:5264/Shop/getproductinfo/@product.Id" >@product.Name</a>
+        </li>
+    }
+</ul>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userRole = getCookie('userRole');
+
+            switch (userRole) {
+                case 'admin':
+                    window.location.href='http://localhost:5264/Manage';
+                    break;
+                case 'Unauth':
+                    window.location.href='http://localhost:5264/Auth/Login';
+                    break;
+            }
+        });
+
+        function getCookie(name) {
+            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            if (match) return match[2];
         }
-    </ul>
+
+    </script>
+
 
 </body>
 </html>

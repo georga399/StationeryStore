@@ -20,6 +20,24 @@
     </form>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userRole = getCookie('userRole');
+
+            switch (userRole) {
+                case 'admin':
+                    window.location.href = 'http://localhost:5264/Manage';
+                    break;
+                case 'user':
+                    window.location.href = 'http://localhost:5264/Shop/GetProducts';
+                    break;
+            }
+        });
+
+        function getCookie(name) {
+            var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            if (match) return match[2];
+        }
+
         function register() {
             var username = document.getElementById("username").value;
             var password = document.getElementById("password").value;

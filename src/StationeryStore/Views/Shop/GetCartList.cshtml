@@ -7,19 +7,46 @@
 </head>
 <body>
 
-    <h2>Корзина</h2>
+<h2>Корзина</h2>
 
-    <ul>
-        @foreach (var cartProduct in Model)
-        {
-            <li>
-                <p><strong>Имя товара:</strong> @cartProduct.Product.Name</p>
-                <p><strong>Цена:</strong> @cartProduct.Product.Cost</p>
-                <p><strong>Количество:</strong> @cartProduct.Count</p>
-                @* <button type="button" onclick="deleteFromCart(@cartProduct)">Удалить</button>  *@
-            </li>
+<ul>
+    @foreach (var cartProduct in Model)
+    {
+        <li>
+            <p>
+                <strong>Имя товара:</strong> @cartProduct.Product.Name
+            </p>
+            <p>
+                <strong>Цена:</strong> @cartProduct.Product.Cost
+            </p>
+            <p>
+                <strong>Количество:</strong> @cartProduct.Count
+            </p>
+            @* <button type="button" onclick="deleteFromCart(@cartProduct)">Удалить</button>  *@
+        </li>
+    }
+</ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userRole = getCookie('userRole');
+
+            switch (userRole) {
+                case 'admin':
+                    window.location.href='http://localhost:5264/Manage';
+                    break;
+                case 'Unauth':
+                    window.location.href='http://localhost:5264/Auth/Login';
+                    break;
+            }
+        });
+
+        function getCookie(name) {
+            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            if (match) return match[2];
         }
-    </ul>
+
+    </script>
 
 </body>
 </html>

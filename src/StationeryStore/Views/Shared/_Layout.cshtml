@@ -12,21 +12,60 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">StationeryStore</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy"></a>
-                        </li>
-                    </ul>
-                </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            // Проверяем значение куки userRole
+                            var userRole = getCookie('userRole');
+
+                            // Создаем Header
+                            var header = document.querySelector('.container-fluid');
+
+
+                            // Добавляем кнопки в зависимости от значения куки userRole
+                            if (userRole === 'admin') {
+                                createButton(header, 'Manage', 'http://localhost:5264/Manage', 'left');
+                                createButton(header, 'Logout', 'http://localhost:5264/Auth/Logout', 'right', handleLogout);
+                            } else if (userRole === 'user') {
+                                createButton(header, 'All Products', 'http://localhost:5264/Shop/GetProducts', 'left');
+                                createButton(header, 'Cart', 'http://localhost:5264/Shop/Cart', 'left');
+                                createButton(header, 'Logout', 'http://localhost:5264/Auth/Logout', 'right', handleLogout);
+                            }
+
+                            function createButton(parent, text, link, position, clickHandler) {
+                                var button = document.createElement('button');
+                                button.innerText = text;
+                                button.addEventListener('click', function () {
+                                    window.location.href = link;
+                                });
+
+                                if (position === 'left') {
+                                    parent.insertBefore(button, parent.firstChild);
+                                } else if (position === 'right') {
+                                    parent.appendChild(button);
+                                }
+
+                                if (clickHandler) {
+                                    button.addEventListener('click', clickHandler);
+                                }
+                            }
+
+                            function handleLogout() {
+                                fetch('http://localhost:5264/Auth/Logout', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                    })
+                                document.cookie = 'userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                                window.location.href = 'http://localhost:5264/Auth/Login';
+                            }
+
+                            function getCookie(name) {
+                                var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                                if (match) return match[2];
+                            }
+                        });
+                    </script>
             </div>
         </nav>
     </header>
@@ -36,12 +75,15 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - StationeryStore - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+function getCookie(name) {
+    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    if (match) return match[2];
+}
+
+</script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
