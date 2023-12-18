@@ -12,17 +12,23 @@ public class ManageController : Controller
 {
     private readonly ILogger<ManageController> _logger;
     private readonly AdminService _adminService;
+    private readonly ShopService _shopService;
+
 
     public ManageController(ILogger<ManageController> logger,
-        AdminService adminService)
+        AdminService adminService,
+        ShopService shopService)
     {
         _logger = logger;
         _adminService = adminService;
+        _shopService = shopService;
+
     }
     [HttpGet]
     public IActionResult Get()
     {
-        return View(); //Todo: create view
+        var models = _shopService.GetProducts();
+        return View(models); 
     }
     [HttpPost("CreateProduct")]
     public IActionResult CreateProduct(ProductViewModel product)

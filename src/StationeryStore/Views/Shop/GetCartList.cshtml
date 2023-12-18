@@ -21,35 +21,5 @@
         }
     </ul>
 
-    @* <script>
-        function deleteFromCart(cartProduct) {
-            fetch('http://localhost:5264/Shop/DeleteFromCart?Id=' + cartProductId +
-                '&Product.Id=' + cartProduct.Product.Id +
-                '&Product.Name=' + cartProduct.Product.Name +
-                '&Product.Cost=' + cartProduct.Product.Cost +
-                '&ProductId=' + cartProduct.ProductId +
-                '&Count=' + cartProduct.Count +
-                '&User.Id=' + cartProduct.User.Id +
-                '&User.Name=' + cartProduct.User.Name +
-                '&UserId=' + cartProduct.UserId, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    alert('Товар удален из корзины!');
-                    location.reload(); // Перезагрузить страницу после удаления
-                } else {
-                    alert('Ошибка при удалении из корзины.');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-            });
-        }
-    </script> *@
-
 </body>
 </html>

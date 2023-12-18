@@ -15,7 +15,7 @@ public class AuthService
         _userManager = userManager;
         _signInManager = signInManager;
     }
-    public async Task<string?> LoginUser(AuthViewModel model)
+    public async Task<IList<string>?> LoginUser(AuthViewModel model)
     {
         var user = await _userManager.FindByNameAsync(model.Username);
         if(user == null || !(await _userManager.CheckPasswordAsync(user, model.Password)))
@@ -23,8 +23,10 @@ public class AuthService
             return null;
         }
         await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false);
-        return user.Id;
+        IList<string> userRoles = await _userManager.GetRolesAsync(user);
+        return userRoles;
     }
+
     public async Task<bool> RegisterUser(AuthViewModel model, Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary ModelState)
     {
         var user = new User{UserName = model.Username}; 

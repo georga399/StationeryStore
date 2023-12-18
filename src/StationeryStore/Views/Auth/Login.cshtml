@@ -7,19 +7,19 @@
 </head>
 <body>
 
-    <h2>Форма авторизации</h2>
+    <h2>ВХОД</h2>
 
     <form id="loginForm">
-        <label for="username">Имя пользователя:</label>
+        <label for="username">Логин:</label>
         <input type="text" id="username" name="username" required>
         <br>
         <label for="password">Пароль:</label>
         <input type="password" id="password" name="password" required>
         <br>
-        <button type="button" onclick="login()">Войти</button>
+        <button type="button" onclick="login()">Вход</button>
     </form>
 
-     <p>Еще нет аккаунта? <button onclick="goToRegistration()">Хочу зарегистрироваться</button></p>
+     <p>Еще нет аккаунта? <button onclick="goToRegistration()">Регистрация</button></p>
 
 
     <script>
@@ -33,19 +33,25 @@
             };
 
             fetch('http://localhost:5264/Auth/Login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    window.location.href = 'http://localhost:5264/Shop/GetProducts';
-                } else {
-                    alert('Ошибка авторизации. Пожалуйста, проверьте ваш логин и пароль.');
-                }
-            })
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.text())
+    .then(result => {
+        if (result === "[\"admin\"]") {
+            setCookie('userRole', 'admin');
+            window.location.href = 'http://localhost:5264/Manage';
+        } else if (result === "[]") {
+            setCookie('userRole', 'user');
+            window.location.href = 'http://localhost:5264/Shop/GetProducts';
+        } else {
+            setCookie('userRole', 'Unauth');
+            alert('Неверный логин или пароль');
+        }
+    })
             .catch(error => {
                 console.error('Ошибка:', error);
             });
@@ -53,6 +59,10 @@
 
         function goToRegistration() {
             window.location.href = 'http://localhost:5264/Auth/Register'; 
+        }
+
+        function setCookie(name, value) {
+            document.cookie = name + '=' + value + '; path=/';
         }
     </script>
 

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление товарами</title>
+</head>
+<body>
+
+    <h2>Управление товарами</h2>
+
+    <form id="productForm">
+        <label for="productId">ID:</label>
+        <input type="text" id="productId" name="productId" required>
+        <br>
+        <label for="productName">Название товара:</label>
+        <input type="text" id="productName" name="productName" required>
+        <br>
+        <label for="productPrice">Цена:</label>
+        <input type="text" id="productPrice" name="productPrice" required>
+        <br>
+
+        <button type="button" onclick="createProduct()">Добавить</button>
+        <button type="button" onclick="editProduct()">Изменить</button>
+        <button type="button" onclick="deleteProduct()">Удалить</button>
+    </form>
+
+    <h2>Список товаров</h2>
+
+    <ul>
+        @foreach (var product in Model)
+        {
+            <li>
+                Название: @product.Name, Стоимость: @product.Cost, ID: @product.Id
+            </li>
+        }
+    </ul>
+
+    <script>
+        function sendRequest(url, type) {
+            var productName = document.getElementById("productName").value;
+            var productPrice = document.getElementById("productPrice").value;
+            var productId = document.getElementById("productId").value;
+
+            // Собираем Query String
+            var queryString = "?Id=" + encodeURIComponent(productId) +
+                "&Name=" + encodeURIComponent(productName) +
+                "&Cost=" + encodeURIComponent(productPrice);
+
+            // Отправляем запрос
+            fetch(url + queryString, {
+                method: type,
+                headers: {
+                    'Content-Type': '*/*'
+                }
+            })
+            .then(response => {
+                if (response.status === 202) {
+                    alert('Успешно!');
+                    location.reload();
+                } else {
+                    alert('Ошибка при выполнении запроса.');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+            });
+        }
+
+        function createProduct() {
+            sendRequest('http://localhost:5264/Manage/CreateProduct', 'POST');
+        }
+
+        function editProduct() {
+            sendRequest('http://localhost:5264/Manage/EditProduct', 'PUT');
+        }
+
+        function deleteProduct() {
+            sendRequest('http://localhost:5264/Manage/DeleteProduct', 'DELETE');
+        }
+    </script>
+
+</body>
+</html>

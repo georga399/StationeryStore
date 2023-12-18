@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using StationeryStore.Models;
 using StationeryStore.Services;
@@ -28,11 +29,12 @@ public class AuthController : Controller
         {
             return BadRequest(ModelState);
         }
-        var userId = await _authService.LoginUser(model);
-        if(userId == null)
+        var userRoles = await _authService.LoginUser(model);
+        if(userRoles == null)
             return BadRequest("Unauthorized");
-        return Ok(userId);
+        return Ok(userRoles);
     }
+
     [HttpGet("Register")]
     public IActionResult Register()
     {
