@@ -61,9 +61,11 @@
     .then(result => {
         if (result === "[\"admin\"]") {
             setCookie('userRole', 'admin');
+            setCookie('name', username);
             window.location.href = 'http://localhost:5264/Manage';
         } else if (result === "[]") {
             setCookie('userRole', 'user');
+            setCookie('name', username);
             window.location.href = 'http://localhost:5264/Shop/GetProducts';
         } else {
             setCookie('userRole', 'Unauth');

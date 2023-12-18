@@ -41,8 +41,7 @@ public class ShopService
     public bool DeleteFromCart(CartProductViewModel model, string UserId)
     {
         var foundProduct = _dbContext.CartProducts
-            .FirstOrDefault(p => p.Product.Name == model.Product.Name 
-                && p.Id == model.Id);
+            .FirstOrDefault(p => p.Id == model.Id);
         if(foundProduct == null)
             return false;
         _dbContext.CartProducts.Remove(foundProduct);

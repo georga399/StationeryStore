@@ -6,10 +6,21 @@
     <title>Корзина</title>
 </head>
 <body>
+@{
+    // Получаем значение из cookie с тегом 'name'
+    string userName = "Гость"; // Значение по умолчанию, если cookie не установлено
+    if (Context.Request.Cookies["name"] != null)
+    {
+        userName = Context.Request.Cookies["name"];
+    }
+}
 
-<h2>Корзина</h2>
+<h2>Корзина для пользователя: @userName</h2>
 
 <ul>
+    @{
+        decimal totalCost = 0;
+    }
     @foreach (var cartProduct in Model)
     {
         <li>
@@ -19,15 +30,20 @@
             <p>
                 <strong>Цена:</strong> @cartProduct.Product.Cost
             </p>
-            <p>
-                <strong>Количество:</strong> @cartProduct.Count
-            </p>
-            @* <button type="button" onclick="deleteFromCart(@cartProduct)">Удалить</button>  *@
+            <button type="button" onclick="deleteFromCart(@cartProduct.Id)">Удалить</button>
         </li>
+
+        totalCost += cartProduct.Product.Cost;
+
+
     }
 </ul>
 
-    <script>
+<p>
+    <strong>Общая стоимость:</strong> @totalCost
+</p>
+
+<script>
         document.addEventListener('DOMContentLoaded', function () {
             const userRole = getCookie('userRole');
 
@@ -45,6 +61,21 @@
             const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
             if (match) return match[2];
         }
+
+        function deleteFromCart(productId) {
+                const url = `http://localhost:5264/Shop/DeleteFromCart?Id=${productId}&Product.Id=${productId}&Product.Name=1&Product.Cost=1&Product.Count=1&ProductId=1&Count=1&User.Id=1&User.Name=1&UserId=1`;
+
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+
+                    },
+                })
+                .then(_ => {
+                    location.reload();
+                })
+            }
 
     </script>
 

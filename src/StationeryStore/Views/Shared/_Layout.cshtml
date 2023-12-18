@@ -23,12 +23,12 @@
 
                             // Добавляем кнопки в зависимости от значения куки userRole
                             if (userRole === 'admin') {
-                                createButton(header, 'Manage', 'http://localhost:5264/Manage', 'left');
-                                createButton(header, 'Logout', 'http://localhost:5264/Auth/Logout', 'right', handleLogout);
+                                createButton(header, 'Управление', 'http://localhost:5264/Manage', 'left');
+                                createButton(header, 'Выход', 'http://localhost:5264/Auth/Logout', 'right', handleLogout);
                             } else if (userRole === 'user') {
-                                createButton(header, 'All Products', 'http://localhost:5264/Shop/GetProducts', 'left');
-                                createButton(header, 'Cart', 'http://localhost:5264/Shop/Cart', 'left');
-                                createButton(header, 'Logout', 'http://localhost:5264/Auth/Logout', 'right', handleLogout);
+                                createButton(header, 'Каталог', 'http://localhost:5264/Shop/GetProducts', 'left');
+                                createButton(header, 'Корзина', 'http://localhost:5264/Shop/Cart', 'left');
+                                createButton(header, 'Выход', 'http://localhost:5264/Auth/Logout', 'right', handleLogout);
                             }
 
                             function createButton(parent, text, link, position, clickHandler) {
@@ -57,6 +57,7 @@
                                         },
                                     })
                                 document.cookie = 'userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                                document.cookie = 'name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                                 window.location.href = 'http://localhost:5264/Auth/Login';
                             }
 
